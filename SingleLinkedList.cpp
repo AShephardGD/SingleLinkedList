@@ -131,10 +131,6 @@ void SingleLinkedList::pushBack(const ValueType& data) {
 }
 
 void SingleLinkedList::pushFront(const ValueType& data) {
-    /*Node* tmp = _head;
-    _head = new Node(data);
-    _head->_next = tmp;
-    ++_size;*/
     insert(data, 0);
 }
 
@@ -293,6 +289,9 @@ void SingleLinkedList::filter(bool (*fn)(ValueType&)) {
 
 
 void SingleLinkedList::reverse() {
+    if (!_head) {
+        return;
+    }
     Node* cur = _head;
     Node* last = nullptr;
     Node* saved;
@@ -307,6 +306,9 @@ void SingleLinkedList::reverse() {
 }
 
 void SingleLinkedList::reverse(size_t start, size_t end) {
+    if (start >= size()) {
+        throw std::out_of_range("Out of SingleLinkedList's range");
+    }
     Node* last = _head;
     for (size_t i = 0; i <= end && last != nullptr; ++i) {
         last = last->_next;

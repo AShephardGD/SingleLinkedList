@@ -4,12 +4,14 @@
 #include <iostream>
 #include <stdexcept>
 
-SingleLinkedList::SingleLinkedList() {
+template <typename T>
+SingleLinkedList<T>::SingleLinkedList() {
     _head = nullptr;
     _size = 0;
 }
 
-SingleLinkedList::SingleLinkedList(const SingleLinkedList& other) {
+template <typename T>
+SingleLinkedList<T>::SingleLinkedList(const SingleLinkedList& other) {
     _size = other._size;
     if (!other._head) {
         _head = nullptr;
@@ -25,14 +27,16 @@ SingleLinkedList::SingleLinkedList(const SingleLinkedList& other) {
     }
 }
 
-SingleLinkedList::SingleLinkedList(SingleLinkedList&& other) noexcept {
+template <typename T>
+SingleLinkedList<T>::SingleLinkedList(SingleLinkedList&& other) noexcept {
     std::swap(_head, other._head);
     std::swap(_size, other._size);
 }
 
 
 
-SingleLinkedList& SingleLinkedList::operator=(const SingleLinkedList& other) {
+template <typename T>
+SingleLinkedList<T>& SingleLinkedList<T>::operator=(const SingleLinkedList& other) {
     delete _head;
     _size = other._size;
     if (!other._head) {
@@ -50,7 +54,8 @@ SingleLinkedList& SingleLinkedList::operator=(const SingleLinkedList& other) {
     return *this;
 }
 
-SingleLinkedList& SingleLinkedList::operator=(SingleLinkedList&& other) noexcept {
+template <typename T>
+SingleLinkedList<T>& SingleLinkedList<T>::operator=(SingleLinkedList&& other) noexcept {
     std::swap(_head, other._head);
     std::swap(_size, other._size);
     delete other._head;
@@ -61,13 +66,15 @@ SingleLinkedList& SingleLinkedList::operator=(SingleLinkedList&& other) noexcept
 
 
 
-SingleLinkedList::~SingleLinkedList() {
+template <typename T>
+SingleLinkedList<T>::~SingleLinkedList() {
     delete _head;
 }
 
 
 
-ValueType& SingleLinkedList::operator[](const size_t pos) {
+template <typename T>
+T& SingleLinkedList<T>::operator[](const size_t pos) {
     if (pos >= _size) {
         throw std::out_of_range("Out of SingleLinkedList's range");
     }
@@ -78,7 +85,8 @@ ValueType& SingleLinkedList::operator[](const size_t pos) {
     return res->_data;
 }
 
-const ValueType& SingleLinkedList::operator[](const size_t pos) const {
+template <typename T>
+const T& SingleLinkedList<T>::operator[](const size_t pos) const {
     if (pos >= _size) {
         throw std::out_of_range("Out of SingleLinkedList's range");
     }
@@ -89,11 +97,13 @@ const ValueType& SingleLinkedList::operator[](const size_t pos) const {
     return res->_data;
 }
 
-size_t SingleLinkedList::size() const {
+template <typename T>
+size_t SingleLinkedList<T>::size() const {
     return _size;
 }
 
-SingleLinkedList::ListIterator SingleLinkedList::getNode(const size_t pos) const {
+template <typename T>
+typename SingleLinkedList<T>::ListIterator SingleLinkedList<T>::getNode(const size_t pos) const {
     if (pos >= _size) {
         throw std::out_of_range("Out of SingleLinkedList's range");
     }
@@ -106,7 +116,8 @@ SingleLinkedList::ListIterator SingleLinkedList::getNode(const size_t pos) const
 
 
 
-bool SingleLinkedList::find(const ValueType& needle) const {
+template <typename T>
+bool SingleLinkedList<T>::find(const T& needle) const {
     if (!_head) {
         return false;
     }
@@ -120,21 +131,25 @@ bool SingleLinkedList::find(const ValueType& needle) const {
     return false;
 }
 
-bool SingleLinkedList::isEmpty() const {
+template <typename T>
+bool SingleLinkedList<T>::isEmpty() const {
     return !_head;
 }
 
 
 
-void SingleLinkedList::pushBack(const ValueType& data) {
+template <typename T>
+void SingleLinkedList<T>::pushBack(const T& data) {
     insert(data, size());
 }
 
-void SingleLinkedList::pushFront(const ValueType& data) {
+template <typename T>
+void SingleLinkedList<T>::pushFront(const T& data) {
     insert(data, 0);
 }
 
-void SingleLinkedList::insert(const ValueType& data, size_t pos) {
+template <typename T>
+void SingleLinkedList<T>::insert(const T& data, size_t pos) {
     ++_size;
     if (!_head) {
         _head = new Node(data);
@@ -157,27 +172,32 @@ void SingleLinkedList::insert(const ValueType& data, size_t pos) {
     cur->_next->_next = saved;
 }
 
-void SingleLinkedList::insertAfter(const ValueType& data, SingleLinkedList::ListIterator it) {
+template <typename T>
+void SingleLinkedList<T>::insertAfter(const T& data, SingleLinkedList::ListIterator it) {
     insert(data, it.getNodeIndex() + 1);
 }
 
 
 
-void SingleLinkedList::clear() {
+template <typename T>
+void SingleLinkedList<T>::clear() {
     delete _head;
     _head = nullptr;
     _size = 0;
 }
 
-void SingleLinkedList::popBack() {
+template <typename T>
+void SingleLinkedList<T>::popBack() {
     remove(size() - 1);
 }
 
-void SingleLinkedList::popFront() {
+template <typename T>
+void SingleLinkedList<T>::popFront() {
     remove(0);
 }
 
-void SingleLinkedList::remove(size_t pos) {
+template <typename T>
+void SingleLinkedList<T>::remove(size_t pos) {
     if (pos >= size()) {
         throw std::out_of_range("Out of SingleLinkedList's range");
     }
@@ -200,17 +220,20 @@ void SingleLinkedList::remove(size_t pos) {
     cur->_next = saved;
 }
 
-void SingleLinkedList::removeAfter(SingleLinkedList::ListIterator it) {
+template <typename T>
+void SingleLinkedList<T>::removeAfter(SingleLinkedList::ListIterator it) {
     remove(it.getNodeIndex() + 1);
 }
 
-void SingleLinkedList::remove(SingleLinkedList::ListIterator it) {
+template <typename T>
+void SingleLinkedList<T>::remove(SingleLinkedList::ListIterator it) {
     remove(it.getNodeIndex());
 }
 
 
 
-void SingleLinkedList::print(std::ostream& stream) const {
+template <typename T>
+void SingleLinkedList<T>::print(std::ostream& stream) const {
     if(!_head) {
         stream << "(nullptr)";
         return;
@@ -225,14 +248,16 @@ void SingleLinkedList::print(std::ostream& stream) const {
 
 
 
-std::ostream& operator<<(std::ostream& stream, const SingleLinkedList& list) {
+template <typename Type>
+std::ostream& operator<<(std::ostream& stream, const SingleLinkedList<Type>& list) {
     list.print(stream);
     return stream;
 }
 
 
 
-void SingleLinkedList::forEach(ValueType& (*fn)(ValueType&)) {
+template <typename T>
+void SingleLinkedList<T>::forEach(T& (*fn)(T&)) {
     if (!_head) {
         return;
     }
@@ -243,13 +268,15 @@ void SingleLinkedList::forEach(ValueType& (*fn)(ValueType&)) {
     } while (cur);
 }
 
-SingleLinkedList SingleLinkedList::map(ValueType& (*fn)(ValueType&)) const {
+template <typename T>
+SingleLinkedList<T> SingleLinkedList<T>::map(T& (*fn)(T&)) const {
     SingleLinkedList list = *this;
     list.forEach(fn);
     return list;
 }
 
-void SingleLinkedList::filter(bool (*fn)(ValueType&)) {
+template <typename T>
+void SingleLinkedList<T>::filter(bool (*fn)(T&)) {
     if (!_head) {
         return;
     }
@@ -288,7 +315,8 @@ void SingleLinkedList::filter(bool (*fn)(ValueType&)) {
 
 
 
-void SingleLinkedList::reverse() {
+template <typename T>
+void SingleLinkedList<T>::reverse() {
     if (!_head) {
         return;
     }
@@ -305,7 +333,8 @@ void SingleLinkedList::reverse() {
     _head = cur;
 }
 
-void SingleLinkedList::reverse(size_t start, size_t end) {
+template <typename T>
+void SingleLinkedList<T>::reverse(size_t start, size_t end) {
     if (start >= size()) {
         throw std::out_of_range("Out of SingleLinkedList's range");
     }
@@ -336,78 +365,90 @@ void SingleLinkedList::reverse(size_t start, size_t end) {
     }
 }
 
-SingleLinkedList SingleLinkedList::getReverseList() const {
+template <typename T>
+SingleLinkedList<T> SingleLinkedList<T>::getReverseList() const {
     SingleLinkedList list = *this;
     list.reverse();
     return list;
 }
 
-SingleLinkedList SingleLinkedList::getReverseList(size_t start, size_t end) const {
+template <typename T>
+SingleLinkedList<T> SingleLinkedList<T>::getReverseList(size_t start, size_t end) const {
     SingleLinkedList list = *this;
     list.reverse(start, end);
     return list;
 }
 
 
-
-SingleLinkedList::ListIterator SingleLinkedList::begin() const {
+template <typename T>
+typename SingleLinkedList<T>::ListIterator SingleLinkedList<T>::begin() const {
     return SingleLinkedList::ListIterator(_head, 0);
 }
 
-SingleLinkedList::ListIterator SingleLinkedList::end() const {
+template <typename T>
+typename SingleLinkedList<T>::ListIterator SingleLinkedList<T>::end() const {
     return SingleLinkedList::ListIterator(nullptr, size());
 }
 
 
-
-SingleLinkedList::Node::Node(const ValueType& data)  {
+template <typename T>
+SingleLinkedList<T>::Node::Node(const T& data)  {
     _data = data;
     _next = nullptr;
 }
 
-SingleLinkedList::Node::~Node() {
+template <typename T>
+SingleLinkedList<T>::Node::~Node() {
     delete _next;
 }
 
+template <typename T>
+SingleLinkedList<T>::ListIterator::ListIterator(Node* ptr, size_t index) : _ptr(ptr), _index(index) {}
 
-SingleLinkedList::ListIterator::ListIterator(Node* ptr, size_t index) : _ptr(ptr), _index(index) {}
 
 
-
-ValueType& SingleLinkedList::ListIterator::operator*() {
+template <typename T>
+T& SingleLinkedList<T>::ListIterator::operator*() {
     return _ptr->_data;
 }
 
-ValueType* SingleLinkedList::ListIterator::operator->() {
+template <typename T>
+T* SingleLinkedList<T>::ListIterator::operator->() {
     return &(_ptr->_data);
 }
 
-SingleLinkedList::ListIterator& SingleLinkedList::ListIterator::operator++() {
+template <typename T>
+typename SingleLinkedList<T>::ListIterator& SingleLinkedList<T>::ListIterator::operator++() {
     _ptr = _ptr->_next;
     ++_index;
     return *(this);
 }
 
-SingleLinkedList::ListIterator SingleLinkedList::ListIterator::operator++(int notUsed) {
+template <typename T>
+typename SingleLinkedList<T>::ListIterator SingleLinkedList<T>::ListIterator::operator++(int notUsed) {
     ListIterator tmp = *this;
     ++(*this);
     return tmp;
 }
 
-bool SingleLinkedList::ListIterator::operator!=(SingleLinkedList::ListIterator& other) {
+template <typename T>
+bool SingleLinkedList<T>::ListIterator::operator!=(SingleLinkedList::ListIterator& other) {
     return _ptr != other._ptr;
 }
 
-bool SingleLinkedList::ListIterator::operator==(SingleLinkedList::ListIterator& other) {
+template <typename T>
+bool SingleLinkedList<T>::ListIterator::operator==(SingleLinkedList::ListIterator& other) {
     return _ptr == other._ptr;
 }
 
-std::ptrdiff_t SingleLinkedList::ListIterator::operator-(SingleLinkedList::ListIterator& other) {
+template <typename T>
+std::ptrdiff_t SingleLinkedList<T>::ListIterator::operator-(SingleLinkedList::ListIterator& other) {
     return _ptr - other._ptr;
 }
 
 
 
-size_t SingleLinkedList::ListIterator::getNodeIndex() const {
+template <typename T>
+size_t SingleLinkedList<T>::ListIterator::getNodeIndex() const {
     return _index;
 }
